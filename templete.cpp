@@ -36,6 +36,56 @@ ll modpow(ll a, ll b, ll m = MOD) {
 ll modinv(ll a, ll m = MOD) { // Format (m must be prime)
     return modpow(a, m - 2, m);
 }
+
+// ---------- Disjoint Set (Union-Find) Template ----------
+struct DSU {
+    vector<int> parent, size, rank;
+
+    DSU(int n) {
+        parent.resize(n + 1);
+        size.assign(n + 1, 1);
+        rank.assign(n + 1, 0);
+        for (int i = 0; i <= n; i++) parent[i] = i;
+    }
+
+    int find(int node) {
+        if (parent[node] == node) return node;
+        return parent[node] = find(parent[node]); // Path Compression
+    }
+
+    void unionBySize(int u, int v) {
+        int pu = find(u), pv = find(v);
+        if (pu == pv) return;
+        if (size[pu] < size[pv]) swap(pu, pv);
+        parent[pv] = pu;
+        size[pu] += size[pv];
+    }
+
+    void unionByRank(int u, int v) {
+        int pu = find(u), pv = find(v);
+        if (pu == pv) return;
+        if (rank[pu] < rank[pv]) {
+            parent[pu] = pv;
+        } else if (rank[pu] > rank[pv]) {
+            parent[pv] = pu;
+        } else {
+            parent[pv] = pu;
+            rank[pu]++;
+        }
+    }
+}; 
+
+vector<int> sieve(int n) {  /// prime numbers
+    vector<int> prime(n+1, 1);
+    prime[0] = prime[1] = 0;
+    for (int i = 2; i * i <= n; i++) {
+        if (prime[i]) {
+            for (int j = i * i; j <= n; j += i)
+                prime[j] = 0;
+        }
+    }
+    return prime;
+}
 void solve(){
     // write your code
 }
