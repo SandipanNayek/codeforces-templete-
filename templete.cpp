@@ -53,18 +53,22 @@ struct DSU {
         return parent[node] = find(parent[node]);
     }
  
-    void unionBySize(int u, int v) {
-        int ulp_u = find(u);
-        int ulp_v = find(v);
-        if (ulp_u == ulp_v) return;
-        if (size[ulp_u] < size[ulp_v]) {
-            parent[ulp_u] = ulp_v;
-            size[ulp_v] += size[ulp_u];
-        } else {
-            parent[ulp_v] = ulp_u;
-            size[ulp_u] += size[ulp_v];
-        }
+    bool unionBySize(int u, int v) {
+    int ulp_u = find(u);
+    int ulp_v = find(v);
+
+    if (ulp_u == ulp_v) return false;
+
+    if (size[ulp_u] < size[ulp_v]) {
+        parent[ulp_u] = ulp_v;
+        size[ulp_v] += size[ulp_u];
+    } else {
+        parent[ulp_v] = ulp_u;
+        size[ulp_u] += size[ulp_v];
     }
+
+    return true;
+}
  
     void unionByRank(int u, int v) {
         int pu = find(u), pv = find(v);
